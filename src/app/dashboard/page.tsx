@@ -1,7 +1,11 @@
 "use client"
 
+import LoginLogout from "../components/LoginLogout"
+
 export default function DashboardPage() {
   return (
-   <div></div>
+   <div>
+    <LoginLogout/>
+   </div>
   )
 }
