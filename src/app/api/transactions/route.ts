@@ -65,7 +65,7 @@ export async function PATCH(req: NextRequest) {
     }
     const { id, type, date, amount, account, category, note, description, bookmarked } = await req.json();
 
-    if (!id || !type || !date || !amount || !category || !account || !bookmarked) {
+    if (!type || !date || !amount || !category || !account) {
         return NextResponse.json({ error: 'Missing required fields' }, { status: 402 });
     }
 
