@@ -1,16 +1,17 @@
 "use server";
 
-import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { transactions } from "@/db/schema";
 import { Transaction } from "@/lib/types/transaction";
+import { authOptions } from "@/app/utils/authOptions";
 import { eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
 export type TransactionsResult =
   | { error: string }
   | { transactions: Transaction[] };
 
 export async function getTransactions(): Promise<TransactionsResult> {
-  const session = await auth()
+  const session = await getServerSession(authOptions);
   if (!session) {
     return { error: "Unauthorized" };
   }

@@ -1,11 +1,11 @@
 "use server"
-
-import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { accountTypes, users } from "@/db/schema";
+import { authOptions } from "@/app/utils/authOptions";
 
 import { eq, and } from "drizzle-orm";
 import { nanoid } from "nanoid";
+import { getServerSession } from "next-auth";
 // Account type functions are now separated
 // types/account.ts
 
@@ -48,7 +48,7 @@ const getAccountByType = async (userId: string): Promise<{ id: string; name: str
 }
 
 export const getAccountTypes = async () => {
-    const session = await auth()
+    const session = await getServerSession(authOptions);
     if (!session) {
         return { error: "Unauthorized" };
     }

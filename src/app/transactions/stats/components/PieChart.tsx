@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 import React, { useState } from 'react';
 import { useStore } from '@/lib/store/store';
 import Highcharts from 'highcharts';
@@ -7,6 +6,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { useTheme } from 'next-themes';
 import { motion } from 'framer-motion';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import type { SeriesPieOptions } from 'highcharts';
 
 const PieChart = () => {
   const { resolvedTheme } = useTheme();
@@ -22,7 +22,6 @@ const PieChart = () => {
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.date);
     const currentDate = new Date();
-
     switch (filter) {
       case 'weekly':
         return transactionDate >= new Date(currentDate.setDate(currentDate.getDate() - 7));
@@ -75,53 +74,55 @@ const PieChart = () => {
 
   const options: Highcharts.Options = {
     chart: {
-      type: 'pie', // Set the chart type to pie
-      plotShadow: false, // Disable shadow for the chart
-      backgroundColor: 'transparent', // Remove background color
+      type: 'pie',
+      plotShadow: false,
+      backgroundColor: 'transparent',
     },
     title: {
-      text: '', // Add chart title
-      align: 'center', // Center align the title
+      text: '',
+      align: 'center',
       style: {
-        color: resolvedTheme === 'dark' ? '#ffffff' : '#000000', // Set title color based on theme
+        color: resolvedTheme === 'dark' ? '#ffffff' : '#000000',
       },
     },
     credits: {
-      enabled: false, // Disable Highcharts credits
+      enabled: false,
     },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>', // Custom tooltip format
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
     },
     accessibility: {
       point: {
-        valueSuffix: '%', // Add percentage suffix to accessibility values
+        valueSuffix: '%',
       },
     },
     plotOptions: {
       pie: {
-        allowPointSelect: true, // Allow points to be selected
+        allowPointSelect: true,
         clip: false,
-        cursor: 'pointer', // Change cursor to pointer on hover
+        cursor: 'pointer',
         dataLabels: {
-          enabled: true, // Enable data labels
-          format: '<b>{point.name}</b>: {point.percentage:.1f} %', // Custom data label format
-          color: resolvedTheme === 'dark' ? '#ffffff' : '#000000', // Set data label color based on theme
-          connectorWidth: 1, // Set width of the connector line
-          connectorPadding: 0, // Set padding between the connector and the label
+          enabled: true,
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          color: resolvedTheme === 'dark' ? '#ffffff' : '#000000',
+          connectorWidth: 1,
+          connectorPadding: 0,
           connectorShape: 'fixedOffset',
         },
-        slicedOffset: 5, // Set the offset of the sliced piece
-        borderWidth: 0, // Set the width of the pie slice border
+        slicedOffset: 5,
+        borderWidth: 0,
         borderRadius: 0,
-        borderColor: resolvedTheme === 'dark' ? '#ffffff' : '#000000', // Set the color of the pie slice border based on theme
+        borderColor: resolvedTheme === 'dark' ? '#ffffff' : '#000000',
       },
     },
-    series: [{
-      name: 'Categories', // Series name
-      colorByPoint: true, // Color each point differently
-      type: 'pie', // Set the series type to pie
-      data: data, // Data for the pie chart
-    }] as any,
+    series: [
+      {
+        name: 'Categories',
+        colorByPoint: true,
+        type: 'pie',
+        data: data,
+      } as SeriesPieOptions, // Cast the series to SeriesPieOptions
+    ],
   };
 
   return (
@@ -171,7 +172,6 @@ const PieChart = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 <div className="flex items-center justify-center w-8 h-8 rounded bg-zinc-800 shrink-0">
-                  {/* Replace with actual icon */}
                   <span className='text-white'>{category[0]}</span>
                 </div>
                 <div className="min-w-0 flex-1">
@@ -183,7 +183,7 @@ const PieChart = () => {
                     <div
                       className="h-1 rounded-full mt-1"
                       style={{
-                        backgroundColor: categoryColors[category], // Dynamic color
+                        backgroundColor: categoryColors[category],
                         width: `${(amount / totalAmount) * 100}%`,
                       }}
                     />

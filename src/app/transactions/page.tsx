@@ -1,12 +1,12 @@
 import React from 'react';
-import { Inter } from 'next/font/google';
+// import { Inter } from 'next/font/google';
 import { getTransactions } from '../actions/getTransactions';
 import getCategories from '../actions/getCategory';
 import { getAccountTypes } from '../actions/getAccountType';
 import Transactions from '../components/Transactions';
 import InitializeStore from '@/lib/store/InitializeStore';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 
 const HomePage = async () => {
     const transactionsResult = await getTransactions();

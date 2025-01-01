@@ -3,7 +3,9 @@ import { z } from 'zod';
 import { db } from '@/db/db';
 import { categories } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { auth } from '@/auth';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/utils/authOptions';
+
 
 const categorySchema = z.object({
   name: z.string().min(1, "Category name is required."),
@@ -11,7 +13,7 @@ const categorySchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
+  const session = await getServerSession(authOptions);
   if (!session || !session.user || !session.user.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useStore } from "@/lib/store/store";
-import { Transaction } from "../types/transaction";
 import { TransactionsResult } from "@/app/actions/getTransactions";
 import { CategoriesResult } from "@/app/actions/getCategory";
 import { GetAccountTypesResult } from "@/app/actions/getAccountType";

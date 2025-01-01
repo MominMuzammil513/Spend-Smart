@@ -4,10 +4,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { notes } from '@/db/schema'; // Import your schema
 import { eq } from 'drizzle-orm';
 import { db } from '@/db/db';
-import { auth } from '@/auth';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/utils/authOptions';
 
 const getUserId = async () => {
-  const session = await auth()
+  const session = await getServerSession(authOptions);
   return session && session.user.id;
 }
 

@@ -6,6 +6,8 @@ import { Heart, Calendar, Clock, Edit, Trash2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { NoteFormValues } from './MainNotes';
+import { UseFormReturn } from 'react-hook-form';
 
 type Notes = {
     id: string;
@@ -21,17 +23,27 @@ type Notes = {
     updatedAt: string;
 };
 
-export default function NotesContainer({ notes, isGridView, setEditingNote, form, setIsDialogOpen, deleteNote, togglePin, toggleLike, selectedTab }: {
-    notes: Notes[],
-    isGridView: boolean,
-    setEditingNote: (note: Notes) => void,
-    form: any,
-    setIsDialogOpen: (open: boolean) => void,
-    deleteNote: (id: string) => void,
-    togglePin: (id: string) => void,
-    toggleLike: (id: string) => void,
-    selectedTab: string
-}) {
+export default function NotesContainer({
+    notes,
+    isGridView,
+    setEditingNote,
+    form,
+    setIsDialogOpen,
+    deleteNote,
+    togglePin,
+    toggleLike,
+    selectedTab,
+  }: {
+    notes: Notes[];
+    isGridView: boolean;
+    setEditingNote: (note: Notes) => void;
+    form: UseFormReturn<NoteFormValues>; // Updated type
+    setIsDialogOpen: (open: boolean) => void;
+    deleteNote: (id: string) => void;
+    togglePin: (id: string) => void;
+    toggleLike: (id: string) => void;
+    selectedTab: string;
+  }) {
     const breakpointColumnsObj = {
         default: 3, // Maximum 3 columns
         1100: 2,

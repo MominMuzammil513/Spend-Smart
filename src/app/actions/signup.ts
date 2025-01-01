@@ -17,10 +17,10 @@ export const SignupAction = async (formdata: z.infer<typeof FormSchema>) => {
   const { cpassword, email, password, username } = validatedFields.data;
   if (password !== cpassword)
     return { success: false, message: "paswords doesn't match" };
-  const userCheker = await db.query.users.findFirst({
+  const userChecker = await db.query.users.findFirst({
     where: eq(users.email, email),
   });
-  if (userCheker)
+  if (userChecker)
     return {
       success: false,
       message: `user with email ${email} already exists.`,

@@ -3,14 +3,15 @@ import { z } from 'zod';
 import { db } from '@/db/db';
 import { accountTypes } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { auth } from '@/auth';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/utils/authOptions';
 
 const accountTypeSchema = z.object({
   name: z.string().min(1, "account type name is required."),
 });
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
+  const session = await getServerSession(authOptions);
   if (!session || !session.user || !session.user.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -64,7 +65,6 @@ export const DELETE = async (req: NextRequest) => {
 export const PATCH = async (req: NextRequest) => {
   try {
     const { accountId,name } = await req.json();
-    console.log(accountId,name)
     // Ensure accountId is a string
     if (!accountId || !name) {
       return NextResponse.json({ error: 'Invalid account ID Or Name is Empty' }, { status: 400 });

@@ -1,9 +1,10 @@
 "use server";
 
-import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { budgets } from "@/db/schema";
+import { authOptions } from "@/app/utils/authOptions";
 import { eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
 
 export type Budget = {
   id: string;
@@ -18,7 +19,7 @@ export type BudgetsResult =
   | { Budgets: Budget[] };
 
 export async function getBudgets(): Promise<BudgetsResult> {
-  const session = await auth()
+  const session = await getServerSession(authOptions);
   if (!session) {
     return { error: "Unauthorized" };
   }

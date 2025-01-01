@@ -44,7 +44,7 @@ const noteSchema = z.object({
   pinned: z.boolean(),
 });
 
-type NoteFormValues = z.infer<typeof noteSchema>;
+export type NoteFormValues = z.infer<typeof noteSchema>;
 
 export default function MainNotes({ notes }: { notes: Notes[] }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -81,6 +81,7 @@ export default function MainNotes({ notes }: { notes: Notes[] }) {
       }
     } catch (error) {
       handleCatchError("Failed to delete note. Please try again.");
+      throw new Error(String(error));
     }
   };
 
@@ -96,6 +97,7 @@ export default function MainNotes({ notes }: { notes: Notes[] }) {
       }
     } catch (error) {
       handleCatchError("Failed to pin/unpin note. Please try again.");
+      throw new Error(String(error));
     }
   };
 
@@ -111,6 +113,7 @@ export default function MainNotes({ notes }: { notes: Notes[] }) {
       }
     } catch (error) {
       handleCatchError("Failed to like/unlike note. Please try again.");
+      throw new Error(String(error));
     }
   };
 
@@ -130,6 +133,7 @@ export default function MainNotes({ notes }: { notes: Notes[] }) {
       }
     } catch (error) {
       handleCatchError("Failed to add note. Please try again.");
+      throw new Error(String(error));
     } finally {
       setIsLoading(false);
     }

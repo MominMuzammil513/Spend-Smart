@@ -1,39 +1,36 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { db } from "./db/db";
 import { eq } from "drizzle-orm";
-import { users } from "./db/schema";
+import { AuthOptions, DefaultSession } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-
-export interface SessionUserProfile {
-  id: string;
-  name: string;
-  email: string;
-}
+import { db } from "../../db/db";
+import { users } from "../../db/schema";
 
 declare module "next-auth" {
-  interface Session {
-    user: SessionUserProfile;
+  interface Session extends DefaultSession {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    } & DefaultSession["user"];
   }
 }
 
-export const {
-  handlers,
-  signIn,
-  signOut,
-  auth,
-} = NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
-    Credentials({
+    CredentialsProvider({
+      type: "credentials",
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
+        if (!credentials) {
+          return null;
+        }
+
+        const { email, password } = credentials;
         if (!email || !password) {
           return null;
         }
@@ -50,7 +47,6 @@ export const {
         if (!isPasswordValid) {
           return null;
         }
-
         return {
           id: user.id,
           name: user.username,
@@ -59,8 +55,7 @@ export const {
       },
     }),
   ],
-  trustHost: true,
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   theme: { brandColor: "#000fff", colorScheme: "auto" },
   pages: {
     signIn: "/login",
@@ -82,7 +77,6 @@ export const {
       if (trigger === "update") {
         token = { ...token, ...session };
       }
-
       return token;
     },
     async session({ session, token }) {
@@ -94,4 +88,4 @@ export const {
       return session;
     },
   },
-});
+};

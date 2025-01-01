@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,7 +16,6 @@ const ModalBottomSheet: React.FC<ModalBottomSheetProps> = ({
     children,
     onCloseEditModal,
 }) => {
-    const [isDragging, setIsDragging] = useState(false);
     const [position, setPosition] = useState({ y: 0 });
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -28,6 +26,7 @@ const ModalBottomSheet: React.FC<ModalBottomSheetProps> = ({
         }
     }, [isOpen]);
 
+    // Handle Escape key press
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
@@ -35,13 +34,13 @@ const ModalBottomSheet: React.FC<ModalBottomSheetProps> = ({
                 onClose(false);
             }
         };
-
         document.addEventListener("keydown", handleKeyDown);
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, [onClose]);
 
+    // Prevent body scroll when modal is open
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
@@ -53,15 +52,10 @@ const ModalBottomSheet: React.FC<ModalBottomSheetProps> = ({
         };
     }, [isOpen]);
 
-    const handleDragStart = () => {
-        setIsDragging(true);
-    };
-
     const handleDragEnd = (
         event: MouseEvent | TouchEvent | PointerEvent,
         info: { offset: { y: number } }
     ) => {
-        setIsDragging(false);
         if (info.offset.y > 100) {
             event.preventDefault();
             onClose(false);
@@ -101,7 +95,6 @@ const ModalBottomSheet: React.FC<ModalBottomSheetProps> = ({
                         transition={{ type: "spring", damping: 25, stiffness: 500 }}
                         drag="y"
                         dragConstraints={{ top: -window.innerHeight / 2, bottom: 0 }}
-                        onDragStart={handleDragStart}
                         onDragEnd={handleDragEnd}
                         onDrag={handleDrag}
                         dragElastic={0.5}

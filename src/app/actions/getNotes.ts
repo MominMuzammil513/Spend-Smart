@@ -1,9 +1,10 @@
 "use server";
 
-import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { notes } from "@/db/schema";
+import { authOptions } from "@/app/utils/authOptions";
 import { eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
 
 export type Notes = {
   id: string;
@@ -24,7 +25,7 @@ type NotesResult =
   | { Notes: Notes[] };
 
 export async function getNotes(): Promise<NotesResult> {
-  const session = await auth()
+  const session = await getServerSession(authOptions);
   if (!session) {
     return { error: "Unauthorized" };
   }
@@ -52,8 +53,6 @@ export async function getNotes(): Promise<NotesResult> {
       .from(notes)
       .where(eq(notes.userId, userId));
 
-    // Convert tags from comma-separated string to array of strings
-    // Convert liked and pinned from string to boolean
     const Notes: Notes[] = dbNotes.map(note => ({
       ...note,
       tags: note.tags.split(',').map(tag => tag.trim()),
@@ -63,9 +62,6 @@ export async function getNotes(): Promise<NotesResult> {
 
     return { Notes };
   } catch (error) {
-    if (error instanceof Error) {
-      return { error: error.message };
-    }
-    return { error: "An unknown error occurred" };
+    throw new Error(String(error));
   }
 }

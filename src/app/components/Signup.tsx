@@ -64,14 +64,12 @@ export default function Signup() {
 
   const processLogin = async (data: z.infer<typeof loginFormSchema>) => {
     setIsLoading(1);
-    console.log("Data being passed to signIn:", data); // Log the data to verify its structure
     const res = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
       callbackUrl: "/"
     });
-    console.log(res, "RRRRRRRRR");
     setIsLoading(0);
     if (res?.status !== 200) {
       toast({

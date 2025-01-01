@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import TransactionsLayout from "../components/TransactionsLayout";
 
 export const metadata: Metadata = {
-    title: "finance tracker",
-    description: "Now tracking the daily personal finance made easy",
+    title: "Finance Tracker",
+    description: "Now tracking daily personal finance made easy",
 };
 
 export default async function RootLayout({
@@ -17,7 +17,7 @@ export default async function RootLayout({
             <main className="">
                 <TransactionsLayout>
                     {children}
-                    <div className='h-52 w-full'></div>
+                    <div className="h-52 w-full"></div>
                 </TransactionsLayout>
             </main>
         </section>
